@@ -29,8 +29,9 @@
               @foreach($folders as $folder)
               <tr>
                 <td>
-                  <a href="{{ route('tasks.index', ['id' => $folder->id]) }}" class="list-group-item">
-                    {{ $folder->title }}
+                  <a href="{{ route('tasks.index', ['id' => $folder->id]) }}" class="list-group-item {{ $folder_id === $folder->id ? 'active' : '' }}">
+    {{ $folder->title }}
+</a>
                   </a>
                 </td>
                 <td><a href="#">編集</a></td>
