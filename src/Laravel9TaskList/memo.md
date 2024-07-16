@@ -5,5 +5,5 @@ php artisan migrate:fresh --seed
 ```
 
 ### 2024/07/16
-No.13 ⑤メッセージの日本語化
+No.14 
 
