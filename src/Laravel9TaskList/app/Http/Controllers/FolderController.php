@@ -53,7 +53,9 @@ class FolderController extends Controller
      */
     public function showEditForm(int $id)
     {
-        $folder = Folder::find($id);
+        /** @var App\Models\User **/
+        $user = Auth::user();
+        $folder = $user->folders()->findOrFail($id);
 
         return view('folders/edit', [
             'folder_id' => $folder->id,
@@ -71,8 +73,9 @@ class FolderController extends Controller
      */
     public function edit(int $id, EditFolder $request)
     {
-        $folder = Folder::find($id);
-
+        /** @var App\Models\User **/
+        $user = Auth::user();
+        $folder = $user->folders()->findOrFail($id);
         $folder->title = $request->title;
         $folder->save();
 
@@ -91,7 +94,9 @@ class FolderController extends Controller
      */
     public function showDeleteForm(int $id)
     {
-        $folder = Folder::find($id);
+        /** @var App\Models\User **/
+        $user = Auth::user();
+        $folder = $user->folders()->findOrFail($id);
 
         return view('folders/delete', [
             'folder_id' => $folder->id,
@@ -109,16 +114,17 @@ class FolderController extends Controller
 		 */
 		public function delete(int $id)
 		{
-				$folder = Folder::find($id);
+        /** @var App\Models\User **/
+        $user = Auth::user();
+        $folder = $user->folders()->findOrFail($id);
 
-				$folder->tasks()->delete();
-				$folder->delete();
+        $folder->tasks()->delete();
+        $folder->delete();
 
-				$folder = Folder::first();
+        $folder = Folder::first();
 
-				return redirect()->route('tasks.index', [
-						'id' => $folder->id
-				]);
+        return redirect()->route('tasks.index', [
+            'id' => $folder->id
+        ]);
 		}
-
 }
