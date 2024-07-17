@@ -134,7 +134,7 @@ class FolderController extends Controller
      *
      *  POST /folders/{folder}/delete
      *  @param Folder $folder
-     *  @return RedirectResponse
+     *  @return \Illuminate\Http\RedirectResponse
      */
     public function delete(Folder $folder)
     {
@@ -143,20 +143,20 @@ class FolderController extends Controller
             $user = Auth::user();
             $folder = $user->folders()->findOrFail($folder->id);
 
-            $folder = DB::transaction(function () use ($folder) {
-                if($folder) throw new \Exception('500');
+            DB::transaction(function () use ($folder) {
                 $folder->tasks()->delete();
                 $folder->delete();
-                return $folder;
             });
 
-            $folder = Folder::first();
+            // 削除後にリダイレクトする先のフォルダを決定
+            $firstFolder = $user->folders()->first();
 
             return redirect()->route('tasks.index', [
-                'folder' => $folder->id
+                'folder' => $firstFolder ? $firstFolder->id : null,
             ]);
         } catch (\Throwable $e) {
             Log::error('Error FolderController in delete: ' . $e->getMessage());
+            return redirect()->route('tasks.index')->with('error', 'フォルダの削除に失敗しました。');
         }
     }
 }
