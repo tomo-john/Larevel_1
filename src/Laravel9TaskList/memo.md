@@ -4,6 +4,6 @@
 php artisan migrate:fresh --seed
 ```
 
-### 2024/07/16
-No.17 
+### 2024/07/17
+Fin
 
